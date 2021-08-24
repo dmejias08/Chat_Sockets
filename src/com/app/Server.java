@@ -53,7 +53,7 @@ public class Server {
                 // Get response
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                while (true) {
+                while (App.sendRequest) {
                     String request = frame.pack;
                     if(request.equals(null)){
                         continue;
@@ -68,12 +68,13 @@ public class Server {
 
                     }
                 }
-
-                System.out.println("Disconnecting...");
-                out.close();
-                in.close();
-                connector.close();
-                socket.close();
+                if (App.end) {
+                    System.out.println("Disconnecting...");
+                    out.close();
+                    in.close();
+                    connector.close();
+                    socket.close();
+                }
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -100,19 +101,20 @@ public class Server {
                 //Send response to  client
                 total = new PrintWriter(socket.getOutputStream(), true); // sent the total to server
 
-                while (true) {
+                while (App.sendRequest) {
                     command_client = price.readLine();
                     if (command_client.contains("quit")) {
                         break;
                     }
                     total.println(getResponse());
                 }
-
-                System.out.println("Disconnecting...");
-                price.close();
-                total.close();
-                connector.close();
-                socket.close();
+                if (App.end) {
+                    System.out.println("Disconnecting...");
+                    price.close();
+                    total.close();
+                    connector.close();
+                    socket.close();
+                }
             }
             catch (IOException e) {
                 e.printStackTrace();

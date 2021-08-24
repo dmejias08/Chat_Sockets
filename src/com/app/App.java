@@ -14,19 +14,24 @@ public class App {
     public JLabel labelWeight;
     public JLabel labelTax;
     public javax.swing.JPanel JPanel;
+    private JButton btnExit;
     public String price;
     public String tax;
     public  String weight;
     public String pack;
+    public static Boolean sendRequest = false;
+    public static Boolean end = false;
+
 
     public App() {
         btnSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                 price = textPrice.getText();
-                 tax = textTax.getText();
-                 weight = textWeight.getText();
+                sendRequest = true;
+                price = textPrice.getText();
+                tax = textTax.getText();
+                weight = textWeight.getText();
 
 
 
@@ -37,6 +42,12 @@ public class App {
                 textTax.setText(null);
 
 
+            }
+        });
+        btnExit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                end = true;
             }
         });
     }

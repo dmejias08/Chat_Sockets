@@ -41,7 +41,7 @@ public class Client {
                 //Send response to  client
                 total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
-                while (true) {
+                while (App.sendRequest) {
                     command_client = price.readLine();
                     if (command_client.contains("quit")) {
                         break;
@@ -49,10 +49,12 @@ public class Client {
                     total.println(getResponse());
                 }
 
-                System.out.println("Disconnecting...");
-                price.close();
-                total.close();
-                server.close();
+                if (App.end) {
+                    System.out.println("Disconnecting...");
+                    price.close();
+                    total.close();
+                    server.close();
+                }
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -81,7 +83,7 @@ public class Client {
                 //Request
                 total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
-                while (true) {
+                while (App.sendRequest) {
                     String request = frame.pack;
                     if(request.equals(null)){
                         continue;
@@ -95,10 +97,12 @@ public class Client {
                     }
                     }
 
-                System.out.println("Disconecting");
-                server.close();
-                total.close();
-                price.close();
+                if (App.end) {
+                    System.out.println("Disconecting");
+                    server.close();
+                    total.close();
+                    price.close();
+                }
             }
             catch (IOException e){
                 e.printStackTrace();
