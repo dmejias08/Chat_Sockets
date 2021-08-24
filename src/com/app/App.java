@@ -17,6 +17,7 @@ public class App {
     public String price;
     public String tax;
     public  String weight;
+    public String pack;
 
     public App() {
         btnSend.addActionListener(new ActionListener() {
@@ -27,8 +28,9 @@ public class App {
                  tax = textTax.getText();
                  weight = textWeight.getText();
 
-                System.out.println(price +""+ tax +""+ weight);
 
+
+                 pack = price + "1" + weight +"1" + tax;
 
                 textPrice.setText(null);
                 textWeight.setText(null);
@@ -44,10 +46,11 @@ public class App {
     }
 
     public void frame(){
-        JFrame frame = new JFrame("Client");
+        JFrame frame = new JFrame("Cliente");
         frame.setContentPane(new App().JPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
     }
+
 }
