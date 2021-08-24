@@ -11,6 +11,7 @@ public class Server {
     public static ServerSocket connector;
     private static int port = 9090;
     public static Socket socket;
+    private static App frame;
     public static void main(String[] args) throws IOException {
 
         connector = new ServerSocket(port);
@@ -23,7 +24,7 @@ public class Server {
 
         client.start();
         server.start();
-        App frame = new App();
+        frame = new App();
         frame.frame();
 
 
@@ -43,7 +44,7 @@ public class Server {
         public void run() {
             try{
                 //read from keyboard
-                keyboard = new BufferedReader(new InputStreamReader(System.in));
+//                keyboard = new BufferedReader(new InputStreamReader(System.in));
 
                 // Send request to server
 
@@ -53,14 +54,19 @@ public class Server {
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
                 while (true) {
-                    String request = keyboard.readLine();
-                    out.println(request);
-                    if (request.contains("quit")) {
-                        break;
+                    String request = frame.pack;
+                    if(request.equals(null)){
+                        continue;
                     }
-                    String response = in.readLine();
-                    System.out.println("El monto :"+ response);
+                    else {
+                        out.println(request);
+                        if (request.contains("quit")) {
+                            break;
+                        }
+                        String response = in.readLine();
+                        System.out.println("El monto :"+ response);
 
+                    }
                 }
 
                 System.out.println("Disconnecting...");
@@ -99,7 +105,7 @@ public class Server {
                     if (command_client.contains("quit")) {
                         break;
                     }
-                    total.println(getPrice());
+                    total.println(getResponse());
                 }
 
                 System.out.println("Disconnecting...");
@@ -117,10 +123,36 @@ public class Server {
 
         }
     }
-    public static int getPrice() {
-        int newPrice;
-        newPrice = Integer.parseInt(String.valueOf(Server1.command_client));
-        int total = (int) (newPrice + newPrice * (0.3));
+    public static double getResponse() {
+        String pack = Server1.command_client;
+        int length = pack.length();
+        int cont = 0;
+        int newPrice = 0;
+        int newWeight = 0;
+        int newTax = 0;
+        double total = 0;
+        String price = "";
+        String weight = "";
+        String tax = "";
+        for (int i= 0; i < length; i++){
+
+            if (pack.charAt(i) == 'E') {
+                price = pack.substring(1,i);
+                System.out.println(price);
+                cont = i;
+
+            }else if (pack.charAt(i) == 'e') {
+                weight = pack.substring(cont+1, i);
+                tax = pack.substring(i+1, length);
+                System.out.println(weight+"  "+tax);
+            }
+        }
+        newPrice = Integer.parseInt(price);
+        newTax = Integer.parseInt(tax);
+        newWeight = Integer.parseInt(weight);
+
+        total = (newPrice*newTax/100) + (newWeight*0.15);
+
         return total;
     }
 

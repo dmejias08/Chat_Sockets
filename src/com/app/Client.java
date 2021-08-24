@@ -1,6 +1,5 @@
 package com.app;
 
-import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,6 +9,7 @@ import java.net.Socket;
 public class Client {
     public static final int port = 9090;
     public static Socket server;
+    public static App frame;
 
     public static void main(String[] args) throws IOException {
         server = new Socket("localhost",port);
@@ -18,18 +18,11 @@ public class Client {
 
         client1.start();
         server1.start();
-        App frame = new App();
+        frame = new App();
         frame.frame();
 
 
     }
-    public static int getPrice() {
-        int newPrice;
-        newPrice = Integer.parseInt(String.valueOf(Server.command_client));
-        int total = (int) (newPrice + newPrice * (0.3));
-        return total;
-    }
-
 
     private static class Server implements Runnable{
 
@@ -53,7 +46,7 @@ public class Client {
                     if (command_client.contains("quit")) {
                         break;
                     }
-                    total.println(getPrice());
+                    total.println(getResponse());
                 }
 
                 System.out.println("Disconnecting...");
@@ -80,7 +73,7 @@ public class Client {
         public void run() {
             try {
                 //Read from keyboard
-                keyboard = new BufferedReader(new InputStreamReader(System.in)); // read info terminal price
+//                keyboard = new BufferedReader(new InputStreamReader(System.in)); // read info terminal price
 
                 //Response
                 price = new BufferedReader(new InputStreamReader(server.getInputStream())); //  price from server
@@ -89,14 +82,19 @@ public class Client {
                 total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                    String request = keyboard.readLine();
-                    total.println(request);
-                    if (request.equals("quit")) {
-                        break;
+                    String request = frame.pack;
+                    if(request.equals(null)){
+                        continue;
+                    }else{
+                        total.println(request);
+                        if (request.equals("quit")) {
+                            break;
+                        }
+                        response = price.readLine(); // request servidor
+                        System.out.println("El monto :" + response);
                     }
-                    response = price.readLine(); // request servidor
-                    System.out.println("El monto :" + response);
-                }
+                    }
+
                 System.out.println("Disconecting");
                 server.close();
                 total.close();
@@ -109,5 +107,39 @@ public class Client {
 
 
         }
+    }
+
+
+    public static double getResponse() {
+        String pack = Server.command_client;
+        int length = pack.length();
+        int cont = 0;
+        int newPrice = 0;
+        int newWeight = 0;
+        int newTax = 0;
+        double total = 0;
+        String price = "";
+        String weight = "";
+        String tax = "";
+        for (int i= 0; i < length; i++){
+
+            if (pack.charAt(i) == 'E') {
+                price = pack.substring(1,i);
+                System.out.println(price);
+                cont = i;
+
+            }else if (pack.charAt(i) == 'e') {
+                weight = pack.substring(cont+1, i);
+                tax = pack.substring(i+1, length);
+                System.out.println(weight+"  "+tax);
+            }
+        }
+        newPrice = Integer.parseInt(price);
+        newTax = Integer.parseInt(tax);
+        newWeight = Integer.parseInt(weight);
+
+        total = (newPrice*newTax/100) + (newWeight*0.15);
+
+        return total;
     }
 }

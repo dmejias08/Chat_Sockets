@@ -30,7 +30,7 @@ public class App {
 
 
 
-                 pack = price + "1" + weight +"1" + tax;
+                 pack = "f"+price + "E" + weight +"e" + tax;
 
                 textPrice.setText(null);
                 textWeight.setText(null);
