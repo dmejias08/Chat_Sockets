@@ -63,6 +63,8 @@ public class Client {
                         server.close();
                         break;
                     }
+                    System.out.println("Estoy en ciclo ");
+                    break;
                 }
             }
             catch (IOException e) {

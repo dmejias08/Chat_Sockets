@@ -20,7 +20,7 @@ public class Server {
         connector2 = new ServerSocket(port2);
         System.out.println("Server is waiting for connection...");
         socket = connector.accept();
-        socket2 = connector.accept();
+        socket2 = connector2.accept();
         System.out.println("Clientes conectado");
 
         Thread server = new Thread(new Server1());
@@ -69,17 +69,19 @@ public class Server {
                             }
                             String response = in.readLine();
                             System.out.println("El monto :" + response);
-
-                        }
-                        if (App.end) {
-                            System.out.println("Disconnecting...");
-                            out.close();
-                            in.close();
-                            connector.close();
-                            socket.close();
-                            break;
                         }
                     }
+                    if (App.end) {
+                        System.out.println("Disconnecting...");
+                        out.close();
+                        in.close();
+                        connector.close();
+                        socket.close();
+                        break;
+                    }
+
+                    System.out.println("Estoy en el ciclo de sevidor cliente ");
+                    break;
                 }
 
             }

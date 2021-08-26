@@ -35,11 +35,11 @@ public class App {
 
 
 
-                 pack = "f"+price + "E" + weight +"e" + tax;
+                pack = "f"+price + "E" + weight +"e" + tax;
 
-                textPrice.setText(null);
-                textWeight.setText(null);
-                textTax.setText(null);
+//                textPrice.setText(null);
+//                textWeight.setText(null);
+//                textTax.setText(null);
 
 
             }
