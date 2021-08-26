@@ -9,15 +9,19 @@ import java.net.Socket;
 
 public class Server {
     public static ServerSocket connector;
+    public static ServerSocket connector2;
     private static int port = 9090;
+    private static int port2 = 9999;
     public static Socket socket;
+    public static Socket socket2;
     private static App frame;
     public static void main(String[] args) throws IOException {
-
         connector = new ServerSocket(port);
+        connector2 = new ServerSocket(port2);
         System.out.println("Server is waiting for connection...");
         socket = connector.accept();
-        System.out.println("Cliente conectado");
+        socket2 = connector.accept();
+        System.out.println("Clientes conectado");
 
         Thread server = new Thread(new Server1());
         Thread client = new Thread(new Client());
@@ -26,7 +30,7 @@ public class Server {
         server.start();
         frame = new App();
         frame.frame();
-
+//
 
     }
 
@@ -48,33 +52,36 @@ public class Server {
 
                 // Send request to server
 
-                out = new PrintWriter(socket.getOutputStream(),true);
+                out = new PrintWriter(socket2.getOutputStream(),true);
 
                 // Get response
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                in = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
 
-                while (App.sendRequest) {
-                    String request = frame.pack;
-                    if(request.equals(null)){
-                        continue;
-                    }
-                    else {
-                        out.println(request);
-                        if (request.contains("quit")) {
+                while (true) {
+                    if (App.sendRequest) {
+                        String request = frame.pack;
+                        if (request.equals(null)) {
+                            continue;
+                        } else {
+                            out.println(request);
+                            if (request.contains("quit")) {
+                                break;
+                            }
+                            String response = in.readLine();
+                            System.out.println("El monto :" + response);
+
+                        }
+                        if (App.end) {
+                            System.out.println("Disconnecting...");
+                            out.close();
+                            in.close();
+                            connector.close();
+                            socket.close();
                             break;
                         }
-                        String response = in.readLine();
-                        System.out.println("El monto :"+ response);
-
                     }
                 }
-                if (App.end) {
-                    System.out.println("Disconnecting...");
-                    out.close();
-                    in.close();
-                    connector.close();
-                    socket.close();
-                }
+
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -101,12 +108,13 @@ public class Server {
                 //Send response to  client
                 total = new PrintWriter(socket.getOutputStream(), true); // sent the total to server
 
-                while (App.sendRequest) {
-                    command_client = price.readLine();
-                    if (command_client.contains("quit")) {
-                        break;
-                    }
-                    total.println(getResponse());
+                while (true) {
+                    if (App.sendRequest){
+                        command_client = price.readLine();
+                        if (command_client.contains("quit")) {
+                            break;
+                        }
+                        total.println(getResponse());
                 }
                 if (App.end) {
                     System.out.println("Disconnecting...");
@@ -114,7 +122,9 @@ public class Server {
                     total.close();
                     connector.close();
                     socket.close();
+                    break;
                 }
+            }
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -125,7 +135,7 @@ public class Server {
 
         }
     }
-    public static double getResponse() {
+    static double getResponse() {
         String pack = Server1.command_client;
         int length = pack.length();
         int cont = 0;
@@ -157,6 +167,4 @@ public class Server {
 
         return total;
     }
-
-
 }

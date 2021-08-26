@@ -8,23 +8,28 @@ import java.net.Socket;
 
 public class Client {
     public static final int port = 9090;
+    public static final int port2 = 9999;
     public static Socket server;
-    public static App frame;
+    public static Socket server2;
+    public static App frame1;
 
     public static void main(String[] args) throws IOException {
         server = new Socket("localhost",port);
+        server2 = new Socket("localhost",port2);
+
         Thread client1 = new Thread(new Client1());
-        Thread server1 = new Thread(new Server());
+        Thread server1 = new Thread(new Server2());
 
         client1.start();
         server1.start();
-        frame = new App();
-        frame.frame();
+
+        frame1 = new App();
+        frame1.frame();
 
 
     }
 
-    private static class Server implements Runnable{
+    private static class Server2 implements Runnable{
 
         private static BufferedReader price;
         private static PrintWriter total;
@@ -36,24 +41,28 @@ public class Client {
 
             try {
                 // Read from client
-                price = new BufferedReader(new InputStreamReader(server.getInputStream())); //  price from client
+                price = new BufferedReader(new InputStreamReader(server2.getInputStream())); //  price from client
 
                 //Send response to  client
-                total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
+                total = new PrintWriter(server2.getOutputStream(), true); // sent the total to server
 
-                while (App.sendRequest) {
-                    command_client = price.readLine();
-                    if (command_client.contains("quit")) {
+                while (true) {
+                    if (App.sendRequest) {
+                        command_client = price.readLine();
+                        if (command_client.contains("quit")) {
+                            break;
+                        }
+                        total.println(getResponse());
+                    }
+
+
+                    if (App.end) {
+                        System.out.println("Disconnecting...");
+                        price.close();
+                        total.close();
+                        server.close();
                         break;
                     }
-                    total.println(getResponse());
-                }
-
-                if (App.end) {
-                    System.out.println("Disconnecting...");
-                    price.close();
-                    total.close();
-                    server.close();
                 }
             }
             catch (IOException e) {
@@ -83,26 +92,30 @@ public class Client {
                 //Request
                 total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
-                while (App.sendRequest) {
-                    String request = frame.pack;
-                    if(request.equals(null)){
-                        continue;
-                    }else{
-                        total.println(request);
-                        if (request.equals("quit")) {
-                            break;
+                while (true) {
+                    if (App.sendRequest) {
+                        String request = frame1.pack;
+                        if (request.equals(null)) {
+                            continue;
+                        } else {
+                            total.println(request);
+                            if (request.equals("quit")) {
+                                break;
+                            }
+                            response = price.readLine(); // request servidor
+                            System.out.println("El monto :" + response);
                         }
-                        response = price.readLine(); // request servidor
-                        System.out.println("El monto :" + response);
-                    }
                     }
 
-                if (App.end) {
-                    System.out.println("Disconecting");
-                    server.close();
-                    total.close();
-                    price.close();
+                    if (App.end) {
+                        System.out.println("Disconecting");
+                        server.close();
+                        total.close();
+                        price.close();
+                        break;
+                    }
                 }
+
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -114,8 +127,10 @@ public class Client {
     }
 
 
-    public static double getResponse() {
-        String pack = Server.command_client;
+
+
+    static double getResponse() {
+        String pack = Server2.command_client;
         int length = pack.length();
         int cont = 0;
         int newPrice = 0;
