@@ -5,7 +5,9 @@
     <constraints>
       <xy x="20" y="20" width="500" height="400"/>
     </constraints>
-    <properties/>
+    <properties>
+      <background color="-5780023"/>
+    </properties>
     <border type="none"/>
     <children>
       <component id="fbb89" class="javax.swing.JTextArea" binding="response">
@@ -15,6 +17,8 @@
           </grid>
         </constraints>
         <properties>
+          <background color="-5780023"/>
+          <foreground color="-5780023"/>
           <text value=""/>
         </properties>
       </component>

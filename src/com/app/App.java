@@ -15,31 +15,34 @@ public class App {
     public JLabel labelTax;
     public javax.swing.JPanel JPanel;
     private JButton btnExit;
-    public String price;
-    public String tax;
-    public  String weight;
-    public String pack;
-    public static Boolean sendRequest = false;
+    public String price = "0";
+    public String tax = "0";
+    public  String weight = "0";
+    public String pack= "0";
+    public static Boolean sendRequest = true;
     public static Boolean end = false;
 
 
-    public App() {
+    public  App() {
         btnSend.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                sendRequest = true;
                 price = textPrice.getText();
                 tax = textTax.getText();
                 weight = textWeight.getText();
 
 
+                sendRequest = false;
+
+//                textPrice.setText(null);
+//                textTax.setText(null);
+//                textWeight.setText(null);
 
                 pack = "f"+price + "E" + weight +"e" + tax;
 
-//                textPrice.setText(null);
-//                textWeight.setText(null);
-//                textTax.setText(null);
+                JOptionPane.showMessageDialog(null, pack);
+
 
 
             }
@@ -47,17 +50,21 @@ public class App {
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
                 end = true;
+                sendRequest = false;
             }
         });
+
+
     }
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
     }
 
-    public void frame(){
-        JFrame frame = new JFrame("Cliente");
+    public void frame(String title){
+        JFrame frame = new JFrame(title);
         frame.setContentPane(new App().JPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();

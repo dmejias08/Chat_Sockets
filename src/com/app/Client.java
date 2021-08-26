@@ -14,6 +14,9 @@ public class Client {
     public static App frame1;
 
     public static void main(String[] args) throws IOException {
+        frame1 = new App();
+        frame1.frame("Cliente 1");
+
         server = new Socket("localhost",port);
         server2 = new Socket("localhost",port2);
 
@@ -23,8 +26,6 @@ public class Client {
         client1.start();
         server1.start();
 
-        frame1 = new App();
-        frame1.frame();
 
 
     }
@@ -47,7 +48,7 @@ public class Client {
                 total = new PrintWriter(server2.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                    if (App.sendRequest) {
+                    if (frame1.sendRequest) {
                         command_client = price.readLine();
                         if (command_client.contains("quit")) {
                             break;
@@ -56,7 +57,7 @@ public class Client {
                     }
 
 
-                    if (App.end) {
+                    if (frame1.end) {
                         System.out.println("Disconnecting...");
                         price.close();
                         total.close();
@@ -95,28 +96,29 @@ public class Client {
                 total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                    if (App.sendRequest) {
+                    if (frame1.sendRequest) {
+                        System.out.println("ESTOY EN EL CICLO DE CIELNTE EN CLIENTE ");
                         String request = frame1.pack;
-                        if (request.equals(null)) {
-                            continue;
-                        } else {
+                        System.out.println(request);
+                        if (request.equals(null) == false) {
                             total.println(request);
-                            if (request.equals("quit")) {
-                                break;
-                            }
                             response = price.readLine(); // request servidor
                             System.out.println("El monto :" + response);
+                        } else {
+                            continue;
                         }
+
                     }
 
-                    if (App.end) {
-                        System.out.println("Disconecting");
-                        server.close();
-                        total.close();
-                        price.close();
-                        break;
-                    }
+
+                if (frame1.end) {
+                    System.out.println("Disconecting");
+                    server.close();
+                    total.close();
+                    price.close();
+                    break;
                 }
+            }
 
             }
             catch (IOException e){

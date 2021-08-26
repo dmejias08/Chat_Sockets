@@ -16,6 +16,9 @@ public class Server {
     public static Socket socket2;
     private static App frame;
     public static void main(String[] args) throws IOException {
+        frame = new App();
+        frame.frame("Cliente 2");
+
         connector = new ServerSocket(port);
         connector2 = new ServerSocket(port2);
         System.out.println("Server is waiting for connection...");
@@ -28,9 +31,7 @@ public class Server {
 
         client.start();
         server.start();
-        frame = new App();
-        frame.frame();
-//
+
 
     }
 
@@ -58,7 +59,7 @@ public class Server {
                 in = new BufferedReader(new InputStreamReader(socket2.getInputStream()));
 
                 while (true) {
-                    if (App.sendRequest) {
+                    if (frame.sendRequest) {
                         String request = frame.pack;
                         if (request.equals(null)) {
                             continue;
@@ -71,7 +72,7 @@ public class Server {
                             System.out.println("El monto :" + response);
                         }
                     }
-                    if (App.end) {
+                    if (frame.end) {
                         System.out.println("Disconnecting...");
                         out.close();
                         in.close();
@@ -80,8 +81,7 @@ public class Server {
                         break;
                     }
 
-                    System.out.println("Estoy en el ciclo de sevidor cliente ");
-                    break;
+
                 }
 
             }
@@ -111,14 +111,15 @@ public class Server {
                 total = new PrintWriter(socket.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                    if (App.sendRequest){
+                    if (frame.sendRequest){
                         command_client = price.readLine();
-                        if (command_client.contains("quit")) {
-                            break;
+                        if (command_client.equals(null) == false) {
+                            total.println(getResponse());
+                        }else {
+                           continue;
                         }
-                        total.println(getResponse());
                 }
-                if (App.end) {
+                if (frame.end) {
                     System.out.println("Disconnecting...");
                     price.close();
                     total.close();
