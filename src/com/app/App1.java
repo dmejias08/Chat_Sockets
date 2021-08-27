@@ -52,13 +52,7 @@ public class App1 extends JFrame implements ActionListener {
         btnSend.setLocation(50,200);
         btnSend.addActionListener(this);
         pane.add(btnSend);
-
-        btnExit = new JButton("Salir");
-        btnExit.setSize(50,50);
-        btnExit.setLocation(50,300);
-        btnExit.addActionListener(this);
-        pane.add(btnExit);
-
+        
 
         total = new JLabel("Respuesta aparecerá aquí");
         total.setBounds(100, 100, 200,40);
@@ -114,9 +108,6 @@ public class App1 extends JFrame implements ActionListener {
 
 
             this.pack = "f" + price + "E" + weight + "e" + tax;
-        }else if(e.getSource() == btnSend){
-            sendRequest = false;
-
         }
 //        JOptionPane.showMessageDialog(null, pack);
 
