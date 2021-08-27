@@ -14,10 +14,9 @@ public class Server {
     private static int port2 = 9999;
     public static Socket socket;
     public static Socket socket2;
-    private static App frame;
+    private static App1 frame;
     public static void main(String[] args) throws IOException {
-        frame = new App();
-        frame.frame("Cliente 2");
+        frame = new App1("Cliente 2");
 
         connector = new ServerSocket(port);
         connector2 = new ServerSocket(port2);
@@ -48,8 +47,6 @@ public class Server {
         @Override
         public void run() {
             try{
-                //read from keyboard
-//                keyboard = new BufferedReader(new InputStreamReader(System.in));
 
                 // Send request to server
 
@@ -61,23 +58,20 @@ public class Server {
                 while (true) {
                     if (frame.sendRequest) {
                         String request = frame.pack;
-                        if (request.equals(null)) {
-                            continue;
-                        } else {
+                        if (request.equals(null) == false){
                             out.println(request);
-                            if (request.contains("quit")) {
-                                break;
-                            }
                             String response = in.readLine();
-                            System.out.println("El monto :" + response);
+                            frame.total.setText("Monto: "+ response);
+
                         }
+
                     }
-                    if (frame.end) {
+                    else{
                         System.out.println("Disconnecting...");
                         out.close();
                         in.close();
                         connector.close();
-                        socket.close();
+                        socket2.close();
                         break;
                     }
 
@@ -96,8 +90,8 @@ public class Server {
     }
 
     private static class Server1 implements Runnable{
-        private static BufferedReader price;
-        private static PrintWriter total;
+        private static BufferedReader in;
+        private static PrintWriter out;
         private static String command_client;
 
         @Override
@@ -105,25 +99,25 @@ public class Server {
 
             try {
                 // Read from client
-                price = new BufferedReader(new InputStreamReader(socket.getInputStream())); //  price from client
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream())); //  price from client
 
                 //Send response to  client
-                total = new PrintWriter(socket.getOutputStream(), true); // sent the total to server
+                out = new PrintWriter(socket.getOutputStream(), true); // sent the total to server
 
                 while (true) {
                     if (frame.sendRequest){
-                        command_client = price.readLine();
-                        System.out.println("Recibi de cliente:"+command_client);
+                        command_client = in.readLine();
+//                        System.out.println("Pedido cliente 1: " + command_client);
                         if (command_client.equals(null) == false) {
-                            total.println(getResponse());
+                            out.println(getResponse());
                         }else {
                            continue;
                         }
                 }
-                if (frame.end) {
+                else {
                     System.out.println("Disconnecting...");
-                    price.close();
-                    total.close();
+                    in.close();
+                    out.close();
                     connector.close();
                     socket.close();
                     break;
@@ -154,13 +148,13 @@ public class Server {
         for (int i= 0; i < length; i++){
             if (pack.charAt(i) == 'E') {
                 price = pack.substring(1,i);
-                System.out.println(price);
+//                System.out.println(price);
                 cont = i;
 
             }else if (pack.charAt(i) == 'e') {
                 weight = pack.substring(cont+1, i);
                 tax = pack.substring(i+1, length);
-                System.out.println(weight+"  "+tax);
+//                System.out.println(weight+"  "+tax);
             }
 
 

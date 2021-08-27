@@ -1,5 +1,6 @@
 package com.app;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -15,7 +16,6 @@ public class Client {
 
     public static void main(String[] args) throws IOException {
         frame1 = new App1("Cliente 1");
-//        frame1.frame("Cliente 1");
 
         server = new Socket("localhost",port);
         server2 = new Socket("localhost",port2);
@@ -32,8 +32,8 @@ public class Client {
 
     private static class Server2 implements Runnable{
 
-        private static BufferedReader price;
-        private static PrintWriter total;
+        private static BufferedReader in;
+        private static PrintWriter out;
         private static String command_client;
 
 
@@ -42,30 +42,25 @@ public class Client {
 
             try {
                 // Read from client
-                price = new BufferedReader(new InputStreamReader(server2.getInputStream())); //  price from client
+                in = new BufferedReader(new InputStreamReader(server2.getInputStream())); //  price from client
 
                 //Send response to  client
-                total = new PrintWriter(server2.getOutputStream(), true); // sent the total to server
+                out = new PrintWriter(server2.getOutputStream(), true); // sent the total to server
 
                 while (true) {
                     if (frame1.sendRequest) {
-                        command_client = price.readLine();
-                        if (command_client.contains("quit")) {
-                            break;
-                        }
-                        total.println(getResponse());
+                        command_client = in.readLine();
+                        out.println(getResponse());
+
                     }
-
-
-                    if (frame1.end) {
+                    else{
                         System.out.println("Disconnecting...");
-                        price.close();
-                        total.close();
-                        server.close();
+                        in.close();
+                        out.close();
+                        server2.close();
                         break;
                     }
-//                    System.out.println("Estoy en ciclo ");
-//                    break;
+
                 }
             }
             catch (IOException e) {
@@ -78,45 +73,43 @@ public class Client {
 
 
     private static class Client1 implements Runnable{
-        private static BufferedReader price;
-        private static PrintWriter total;
-        private static BufferedReader keyboard;
+        private static BufferedReader in;
+        private static PrintWriter out;
         private static String response;
 
         @Override
         public void run() {
             try {
-                //Read from keyboard
-//                keyboard = new BufferedReader(new InputStreamReader(System.in)); // read info terminal price
 
                 //Response
-                price = new BufferedReader(new InputStreamReader(server.getInputStream())); //  price from server
+                in = new BufferedReader(new InputStreamReader(server.getInputStream())); //  price from server
 
                 //Request
-                total = new PrintWriter(server.getOutputStream(), true); // sent the total to server
+                out = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                    if (frame1.sendRequest) {
-                        System.out.println("ESTOY EN EL CICLO DE CIELNTE EN CLIENTE ");
-                        String request = frame1.pack;
-                        System.out.println("el pedido es:"+request);
-                        if (request.equals(null) == false) {
-                            total.println(request);
-                            response = price.readLine(); // request servidor
-                            System.out.println("El monto :" + response);
-                            frame1.response.setText(response);
-                        } else {
-                            continue;
+                        if (frame1.sendRequest) {
+//                        System.out.println("ESTOY EN EL CICLO DE CIELNTE EN CLIENTE ");
+                            String request = frame1.pack;
+//                        System.out.println("Hago pedido a Server1: "+request);
+                            if (request.equals(null) == false) {
+                                out.println(request);
+                                response = in.readLine(); // request servidor
+//                            System.out.println("El monto :" + response);
+                                frame1.total.setText("Monto: " + response);
+//                            frame1.pack = "0";
+                            }
+
                         }
 
-                    }
 
 
-                if (frame1.end) {
+
+                else{
                     System.out.println("Disconecting");
                     server.close();
-                    total.close();
-                    price.close();
+                    in.close();
+                    out.close();
                     break;
                 }
             }
@@ -150,17 +143,13 @@ public class Client {
 
             if (pack.charAt(i) == 'E') {
                 price = pack.substring(1,i);
-                System.out.println(price);
+//                System.out.println(price);
                 cont = i;
 
             }else if (pack.charAt(i) == 'e') {
-                weight = pack.substring(cont+1, i);
-                tax = pack.substring(i+1, length);
-                System.out.println(weight+"  "+tax);
-            }else{
-                price = "0";
-                tax = "0";
-                weight = "0";
+                weight = pack.substring(cont + 1, i);
+                tax = pack.substring(i + 1, length);
+//                System.out.println(weight+"  "+tax);
             }
         }
         newPrice = Integer.parseInt(price);
