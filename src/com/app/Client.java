@@ -1,5 +1,7 @@
 package com.app;
 
+
+
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,6 +9,11 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+/**
+ * A class who connects to server through a socket-connection
+ * @version 1, 27/08/2021
+ * @author Diana Mejías Hernández, 2020077281
+ */
 public class Client {
     public static final int port = 9090;
     public static final int port2 = 9999;
@@ -30,6 +37,9 @@ public class Client {
 
     }
 
+    /**
+     * A private class in Client. It can read and send a response to Server
+     */
     private static class Server2 implements Runnable{
 
         private static BufferedReader in;
@@ -71,7 +81,9 @@ public class Client {
         }
     }
 
-
+    /**
+     * A private class in Client who can send request to server and read a response
+     */
     private static class Client1 implements Runnable{
         private static BufferedReader in;
         private static PrintWriter out;
@@ -81,10 +93,10 @@ public class Client {
         public void run() {
             try {
 
-                //Response
+                //Response from server
                 in = new BufferedReader(new InputStreamReader(server.getInputStream())); //  price from server
 
-                //Request
+                //Request to server
                 out = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
                 while (true) {
@@ -124,8 +136,10 @@ public class Client {
         }
     }
 
-
-
+    /**
+     * A method that reads a string that contains numbers, divides it into each number
+     * @return the result of an operation that contains the numbers that were in the string.
+     */
 
     static double getResponse() {
         String pack = Server2.command_client;

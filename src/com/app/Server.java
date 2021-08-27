@@ -7,6 +7,12 @@ import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * This class creates a server, who waits for a client to connect
+ * @version 1, 27/08/2021
+ * @author Diana Mejías Hernández, 2020077281
+ */
+
 public class Server {
     public static ServerSocket connector;
     public static ServerSocket connector2;
@@ -34,7 +40,9 @@ public class Server {
 
     }
 
-
+    /**
+     * Private class Client in Server is responsable of sending a request and reading a response
+     */
 
     private static class Client implements Runnable  {
 
@@ -49,7 +57,6 @@ public class Server {
             try{
 
                 // Send request to server
-
                 out = new PrintWriter(socket2.getOutputStream(),true);
 
                 // Get response
@@ -61,6 +68,7 @@ public class Server {
                         if (request.equals(null) == false){
                             out.println(request);
                             String response = in.readLine();
+
                             frame.total.setText("Monto: "+ response);
 
                         }
@@ -89,6 +97,9 @@ public class Server {
         }
     }
 
+    /**
+     * This class is in charge of reading and sending a response to Class Client
+     */
     private static class Server1 implements Runnable{
         private static BufferedReader in;
         private static PrintWriter out;
@@ -133,6 +144,10 @@ public class Server {
 
         }
     }
+    /**
+     * A method that reads a string that contains numbers, divides it into each number
+     * @return the result of an operation that contains the numbers that were in the string.
+     */
     static double getResponse() {
         String pack = Server1.command_client;
 
@@ -145,6 +160,8 @@ public class Server {
         String price = "";
         String weight = "";
         String tax = "";
+
+        //read string
         for (int i= 0; i < length; i++){
             if (pack.charAt(i) == 'E') {
                 price = pack.substring(1,i);
@@ -159,6 +176,7 @@ public class Server {
 
 
         }
+        //converting to integer
         newPrice = Integer.parseInt(price);
         newTax = Integer.parseInt(tax);
         newWeight = Integer.parseInt(weight);

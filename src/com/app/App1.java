@@ -5,6 +5,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * This class creates the interface, in which the chat between the server and the client occurs.
+ * class Client and class Server use an instance of this class
+ * @version 1 27/08/2021
+ * @author Diana Mejías Hernández
+ */
+
 public class App1 extends JFrame implements ActionListener {
 
     public JPanel pane;
@@ -24,6 +31,10 @@ public class App1 extends JFrame implements ActionListener {
     public Boolean sendRequest = true;
     public Boolean end = false;
 
+    /**
+     * This constructor is where the interface and its components were created
+     * @param title Set the title that the interface is going to have
+     */
 
     public  App1(String title){
 
@@ -83,6 +94,10 @@ public class App1 extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * this method gets the numbers(prices, tax and weight)  from the interface
+     * @param e Defines the event of button
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
 
