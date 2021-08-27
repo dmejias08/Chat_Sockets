@@ -113,6 +113,7 @@ public class Server {
                 while (true) {
                     if (frame.sendRequest){
                         command_client = price.readLine();
+                        System.out.println("Recibi de cliente:"+command_client);
                         if (command_client.equals(null) == false) {
                             total.println(getResponse());
                         }else {
@@ -140,6 +141,7 @@ public class Server {
     }
     static double getResponse() {
         String pack = Server1.command_client;
+
         int length = pack.length();
         int cont = 0;
         int newPrice = 0;
@@ -150,7 +152,6 @@ public class Server {
         String weight = "";
         String tax = "";
         for (int i= 0; i < length; i++){
-
             if (pack.charAt(i) == 'E') {
                 price = pack.substring(1,i);
                 System.out.println(price);
@@ -161,6 +162,8 @@ public class Server {
                 tax = pack.substring(i+1, length);
                 System.out.println(weight+"  "+tax);
             }
+
+
         }
         newPrice = Integer.parseInt(price);
         newTax = Integer.parseInt(tax);

@@ -11,11 +11,11 @@ public class Client {
     public static final int port2 = 9999;
     public static Socket server;
     public static Socket server2;
-    public static App frame1;
+    public static App1 frame1;
 
     public static void main(String[] args) throws IOException {
-        frame1 = new App();
-        frame1.frame("Cliente 1");
+        frame1 = new App1("Cliente 1");
+//        frame1.frame("Cliente 1");
 
         server = new Socket("localhost",port);
         server2 = new Socket("localhost",port2);
@@ -64,8 +64,8 @@ public class Client {
                         server.close();
                         break;
                     }
-                    System.out.println("Estoy en ciclo ");
-                    break;
+//                    System.out.println("Estoy en ciclo ");
+//                    break;
                 }
             }
             catch (IOException e) {
@@ -99,11 +99,12 @@ public class Client {
                     if (frame1.sendRequest) {
                         System.out.println("ESTOY EN EL CICLO DE CIELNTE EN CLIENTE ");
                         String request = frame1.pack;
-                        System.out.println(request);
+                        System.out.println("el pedido es:"+request);
                         if (request.equals(null) == false) {
                             total.println(request);
                             response = price.readLine(); // request servidor
                             System.out.println("El monto :" + response);
+                            frame1.response.setText(response);
                         } else {
                             continue;
                         }
@@ -135,6 +136,7 @@ public class Client {
 
     static double getResponse() {
         String pack = Server2.command_client;
+
         int length = pack.length();
         int cont = 0;
         int newPrice = 0;
@@ -155,6 +157,10 @@ public class Client {
                 weight = pack.substring(cont+1, i);
                 tax = pack.substring(i+1, length);
                 System.out.println(weight+"  "+tax);
+            }else{
+                price = "0";
+                tax = "0";
+                weight = "0";
             }
         }
         newPrice = Integer.parseInt(price);
