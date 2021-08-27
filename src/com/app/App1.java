@@ -26,21 +26,22 @@ public class App1 extends JFrame implements ActionListener {
     public JLabel total;
     public String price = "0";
     public String tax = "0";
-    public  String weight = "0";
+    public String weight = "0";
     public String pack = "f0E0e0";
     public Boolean sendRequest = true;
     public Boolean end = false;
 
     /**
      * This constructor is where the interface and its components were created
+     *
      * @param title Set the title that the interface is going to have
      */
 
-    public  App1(String title){
+    public App1(String title) {
 
         setTitle(title);
         setVisible(true);
-        setSize(300,400);
+        setSize(300, 400);
         setBackground(Color.getColor("#bad5ff"));
         pane = new JPanel();
         this.getContentPane().add(pane);
@@ -48,38 +49,38 @@ public class App1 extends JFrame implements ActionListener {
         pane.setBackground(Color.decode("#bad5ff"));
 
         btnSend = new JButton("Enviar");
-        btnSend.setSize(150,50);
-        btnSend.setLocation(50,200);
+        btnSend.setSize(150, 50);
+        btnSend.setLocation(50, 200);
         btnSend.addActionListener(this);
         pane.add(btnSend);
-        
+
 
         total = new JLabel("Respuesta aparecerá aquí");
-        total.setBounds(100, 100, 200,40);
+        total.setBounds(100, 100, 200, 40);
         pane.add(total);
 
         textPrice = new JTextField();
-        textPrice.setBounds(100,15,60,25);
+        textPrice.setBounds(100, 15, 60, 25);
         pane.add(textPrice);
 
         textWeight = new JTextField();
-        textWeight.setBounds(100,50,60,25);
+        textWeight.setBounds(100, 50, 60, 25);
         pane.add(textWeight);
 
         textTax = new JTextField();
-        textTax.setBounds(100,80,60,25);
+        textTax.setBounds(100, 80, 60, 25);
         pane.add(textTax);
 
         labelPrice = new JLabel("Precio: ");
-        labelPrice.setBounds(10,15,70,25);
+        labelPrice.setBounds(10, 15, 70, 25);
         pane.add(labelPrice);
 
         labelWeight = new JLabel("Peso: ");
-        labelWeight.setBounds(10,50,70,25);
+        labelWeight.setBounds(10, 50, 70, 25);
         pane.add(labelWeight);
 
         labelTax = new JLabel("Impuesto: ");
-        labelTax.setBounds(10,80,70,25);
+        labelTax.setBounds(10, 80, 70, 25);
         pane.add(labelTax);
 
         setResizable(false);
@@ -90,27 +91,42 @@ public class App1 extends JFrame implements ActionListener {
 
     /**
      * this method gets the numbers(prices, tax and weight)  from the interface
+     *
      * @param e Defines the event of button
      */
     @Override
     public void actionPerformed(ActionEvent e) {
+//        try{
 
         if (e.getSource() == btnSend) {
-            price = textPrice.getText();
-            tax = textTax.getText();
-            weight = textWeight.getText();
+            try {
+
+                price = textPrice.getText();
+                tax = textTax.getText();
+                weight = textWeight.getText();
 
 
+                int checkPrice = Integer.parseInt(price);
+                int checkTax = Integer.parseInt(tax);
+                int checkWeight = Integer.parseInt(weight);
 
+                textPrice.setText(null);
+                textTax.setText(null);
+                textWeight.setText(null);
+
+                this.pack = "f" + price + "E" + weight + "e" + tax;
+            } catch (NumberFormatException n){
+            this.pack = "f0E0e0";
             textPrice.setText(null);
             textTax.setText(null);
             textWeight.setText(null);
 
-
-            this.pack = "f" + price + "E" + weight + "e" + tax;
+            JOptionPane.showMessageDialog(null, "Debe ingresar números");
         }
-//        JOptionPane.showMessageDialog(null, pack);
-
-
     }
-}
+////        JOptionPane.showMessageDialog(null, pack);
+
+
+        }
+    }
+

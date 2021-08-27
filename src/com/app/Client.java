@@ -3,6 +3,8 @@ package com.app;
 
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,6 +24,8 @@ public class Client {
     public static App1 frame1;
 
     public static void main(String[] args) throws IOException {
+
+
         frame1 = new App1("Cliente 1");
 
         server = new Socket("localhost",port);
@@ -84,7 +88,7 @@ public class Client {
     /**
      * A private class in Client who can send a request to server and read a response
      */
-    private static class Client1 implements Runnable{
+    private static class Client1 implements Runnable {
         private static BufferedReader in;
         private static PrintWriter out;
         private static String response;
@@ -100,38 +104,37 @@ public class Client {
                 out = new PrintWriter(server.getOutputStream(), true); // sent the total to server
 
                 while (true) {
-                        if (frame1.sendRequest) {
+                    if (frame1.sendRequest) {
 //                        System.out.println("ESTOY EN EL CICLO DE CIELNTE EN CLIENTE ");
-                            String request = frame1.pack;
+                        String request = frame1.pack;
 //                        System.out.println("Hago pedido a Server1: "+request);
-                            if (request.equals(null) == false) {
-                                out.println(request);
-                                response = in.readLine(); // request servidor
+                        if (request.equals(null) == false) {
+                            out.println(request);
+                            response = in.readLine(); // request servidor
 //                            System.out.println("El monto :" + response);
-                                frame1.total.setText("Monto: " + response);
+                            frame1.total.setText("Monto: " + response);
 //                            frame1.pack = "0";
-                            }
-
                         }
 
-                else{
-                    System.out.println("Disconecting");
-                    server.close();
-                    in.close();
-                    out.close();
-                    break;
+                    } else {
+                        System.out.println("Disconecting");
+                        server.close();
+                        in.close();
+                        out.close();
+                        break;
+                    }
                 }
-            }
 
-            }
-            catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
 
-
         }
     }
+
+
+
 
     /**
      * A method that reads a string that contains numbers, divides it into each number as an integer.
@@ -139,36 +142,40 @@ public class Client {
      */
 
     static double getResponse() {
-        String pack = Server2.command_client;
+//        try {
+            String pack = Server2.command_client;
 
-        int length = pack.length();
-        int cont = 0;
-        int newPrice = 0;
-        int newWeight = 0;
-        int newTax = 0;
-        double total = 0;
-        String price = "";
-        String weight = "";
-        String tax = "";
-        for (int i= 0; i < length; i++){
+            int length = pack.length();
+            int cont = 0;
+            int newPrice = 0;
+            int newWeight = 0;
+            int newTax = 0;
+            double total = 0;
+            String price = "";
+            String weight = "";
+            String tax = "";
+            for (int i = 0; i < length; i++) {
 
-            if (pack.charAt(i) == 'E') {
-                price = pack.substring(1,i);
+                if (pack.charAt(i) == 'E') {
+                    price = pack.substring(1, i);
 //                System.out.println(price);
-                cont = i;
+                    cont = i;
 
-            }else if (pack.charAt(i) == 'e') {
-                weight = pack.substring(cont + 1, i);
-                tax = pack.substring(i + 1, length);
+                } else if (pack.charAt(i) == 'e') {
+                    weight = pack.substring(cont + 1, i);
+                    tax = pack.substring(i + 1, length);
 //                System.out.println(weight+"  "+tax);
+                }
             }
-        }
-        newPrice = Integer.parseInt(price);
-        newTax = Integer.parseInt(tax);
-        newWeight = Integer.parseInt(weight);
+            newPrice = Integer.parseInt(price);
+            newTax = Integer.parseInt(tax);
+            newWeight = Integer.parseInt(weight);
 
-        total = (newPrice*newTax/100) + (newWeight*0.15);
+            total = (newPrice * newTax / 100) + (newWeight * 0.15);
 
-        return total;
+            return total;
+//        }finally {
+//            JOptionPane.showMessageDialog(null, "Debe ingresar numeros");
+//        }
     }
 }

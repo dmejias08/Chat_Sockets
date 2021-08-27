@@ -1,5 +1,6 @@
 package com.app;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +22,7 @@ public class Server {
     public static Socket socket;
     public static Socket socket2;
     private static App1 frame;
+
     public static void main(String[] args) throws IOException {
         frame = new App1("Cliente 2");
 
@@ -149,40 +151,45 @@ public class Server {
      * @return the result of an operation that contains the numbers that were in the string.
      */
     static double getResponse() {
-        String pack = Server1.command_client;
+//        try {
+            String pack = Server1.command_client;
 
-        int length = pack.length();
-        int cont = 0;
-        int newPrice = 0;
-        int newWeight = 0;
-        int newTax = 0;
-        double total = 0;
-        String price = "";
-        String weight = "";
-        String tax = "";
+            int length = pack.length();
+            int cont = 0;
+            int newPrice = 0;
+            int newWeight = 0;
+            int newTax = 0;
+            double total = 0;
+            String price = "";
+            String weight = "";
+            String tax = "";
 
-        //read string
-        for (int i= 0; i < length; i++){
-            if (pack.charAt(i) == 'E') {
-                price = pack.substring(1,i);
+            //read string
+            for (int i = 0; i < length; i++) {
+                if (pack.charAt(i) == 'E') {
+                    price = pack.substring(1, i);
 //                System.out.println(price);
-                cont = i;
+                    cont = i;
 
-            }else if (pack.charAt(i) == 'e') {
-                weight = pack.substring(cont+1, i);
-                tax = pack.substring(i+1, length);
+                } else if (pack.charAt(i) == 'e') {
+                    weight = pack.substring(cont + 1, i);
+                    tax = pack.substring(i + 1, length);
 //                System.out.println(weight+"  "+tax);
+                }
+
+
             }
+            //converting to integer
+            newPrice = Integer.parseInt(price);
+            newTax = Integer.parseInt(tax);
+            newWeight = Integer.parseInt(weight);
 
+            total = (newPrice * newTax / 100) + (newWeight * 0.15);
 
-        }
-        //converting to integer
-        newPrice = Integer.parseInt(price);
-        newTax = Integer.parseInt(tax);
-        newWeight = Integer.parseInt(weight);
-
-        total = (newPrice*newTax/100) + (newWeight*0.15);
-
-        return total;
+            return total;
+//        }
+//        finally {
+//            JOptionPane.showMessageDialog(null, "Debe ingresar numeros");
+//        }
     }
 }
