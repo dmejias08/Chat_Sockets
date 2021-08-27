@@ -41,7 +41,7 @@ public class Server {
     }
 
     /**
-     * Private class Client in Server is responsable of sending a request and reading a response
+     * this class Client in Server is charge of  sending a request and reading a response from server
      */
 
     private static class Client implements Runnable  {
@@ -145,7 +145,7 @@ public class Server {
         }
     }
     /**
-     * A method that reads a string that contains numbers, divides it into each number
+     * A method that reads a string that contains numbers, divides it into each number as an integer
      * @return the result of an operation that contains the numbers that were in the string.
      */
     static double getResponse() {

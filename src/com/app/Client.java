@@ -82,7 +82,7 @@ public class Client {
     }
 
     /**
-     * A private class in Client who can send request to server and read a response
+     * A private class in Client who can send a request to server and read a response
      */
     private static class Client1 implements Runnable{
         private static BufferedReader in;
@@ -114,9 +114,6 @@ public class Client {
 
                         }
 
-
-
-
                 else{
                     System.out.println("Disconecting");
                     server.close();
@@ -137,7 +134,7 @@ public class Client {
     }
 
     /**
-     * A method that reads a string that contains numbers, divides it into each number
+     * A method that reads a string that contains numbers, divides it into each number as an integer.
      * @return the result of an operation that contains the numbers that were in the string.
      */
 
